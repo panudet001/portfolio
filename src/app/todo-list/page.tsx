@@ -63,27 +63,20 @@ const TodoList = () => {
     const [lockBtn, setLockBtn] = useState<boolean>(true);
 
     const selectItem = (item: Item) => {
-        setTime((prevTime) => {
-            if (lockBtn && prevTime === 0 && newItems.length === 0) {
-                return 5;
+        if (lockBtn) {
+            if (time === 0 && newItems.length === 0) {
+                setTime(5)
             }
-            return prevTime;
-        });
-        if(lockBtn){
             setNewItem((prevNewItems) => [...prevNewItems, item]);
             setItem((prevItems) => prevItems.filter((d) => d !== item));
         }
-       
     }
 
-
     const cancelItem = (item: Item) => {
-        if(lockBtn){
+        if (lockBtn) {
             setNewItem((prevNewItems) => prevNewItems.filter((d) => d !== item));
             setItem((prevItems) => [...prevItems, item]);
         }
-        
-
     }
 
     const handleBack = () => {
@@ -112,17 +105,15 @@ const TodoList = () => {
                         }, index * 500);
                     });
                 }
-
             }
         }
     }, [time]);
 
-    useEffect(()=> {
-        if(newItems.length === 0){
+    useEffect(() => {
+        if (newItems.length === 0) {
             setLockBtn(true);
         }
-    },[newItems])
-
+    }, [newItems])
 
     return (
         <>
@@ -136,7 +127,7 @@ const TodoList = () => {
                     Go to github
                 </Link>
             </div>
-            <div className='grid grid-cols-3 gap-4 pl-10 pr-10'>
+            <div className='grid grid-cols-1 gap-4 pl-10 pr-10 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3'>
                 <div className='flex flex-col gap-2'>
                     {items.map((item, index) => (
                         <button key={index} type='button' onClick={() => selectItem(item)} className='py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700'>{item.name}</button>
