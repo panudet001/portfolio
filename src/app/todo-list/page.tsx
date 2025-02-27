@@ -129,7 +129,7 @@ const TodoList = () => {
             <div className='text-lg pl-10 pr-10 mt-5 flex gap-2 mb-2 justify-end items-center'>
                 <h1>{time} s</h1>
                 <Link
-                    href='./'
+                    href='https://github.com/panudet001/portfolio/tree/main/src/app/todo-list'
                     target='_blank'
                     className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
