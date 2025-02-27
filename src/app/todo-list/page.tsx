@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import CardItem from './cardItem';
+import Link from 'next/link';
 
 interface Item {
     type: string;
@@ -59,28 +60,34 @@ const TodoList = () => {
     const [items, setItem] = useState<Item[]>(data)
     const [newItems, setNewItem] = useState<Item[]>([])
     const [time, setTime] = useState<number>(0);
+    const [lockBtn, setLockBtn] = useState<boolean>(true);
 
     const selectItem = (item: Item) => {
         setTime((prevTime) => {
-            if (prevTime === 0 || newItems.length === 0) {
+            if (lockBtn && prevTime === 0 && newItems.length === 0) {
                 return 5;
             }
             return prevTime;
         });
-
-        setNewItem((prevNewItems) => [...prevNewItems, item]);
-        setItem((prevItems) => prevItems.filter((d) => d !== item));
+        if(lockBtn){
+            setNewItem((prevNewItems) => [...prevNewItems, item]);
+            setItem((prevItems) => prevItems.filter((d) => d !== item));
+        }
+       
     }
 
 
     const cancelItem = (item: Item) => {
-        setNewItem((prevNewItems) => prevNewItems.filter((d) => d !== item));
-        setItem((prevItems) => [...prevItems, item]);
+        if(lockBtn){
+            setNewItem((prevNewItems) => prevNewItems.filter((d) => d !== item));
+            setItem((prevItems) => [...prevItems, item]);
+        }
+        
 
     }
 
     const handleBack = () => {
-        if (newItems.length > 0) {
+        if (lockBtn && newItems.length > 0) {
             const firstItem = newItems[0];
             setNewItem((prevNewItems) => prevNewItems.filter((d) => d.name !== firstItem.name));
             setItem((prevItems) => [...prevItems, firstItem]);
@@ -96,12 +103,13 @@ const TodoList = () => {
             return () => clearInterval(timer);
         } else {
             if (newItems.length > 0) {
+                setLockBtn(false);
                 if (newItems.length > 0) {
                     newItems.forEach((item, index) => {
                         setTimeout(() => {
                             setItem((prevItems) => [...prevItems, item]);
                             setNewItem((prevNewItems) => prevNewItems.filter((d) => d.name !== item.name));
-                        }, index * 1000);
+                        }, index * 500);
                     });
                 }
 
@@ -109,11 +117,24 @@ const TodoList = () => {
         }
     }, [time]);
 
+    useEffect(()=> {
+        if(newItems.length === 0){
+            setLockBtn(true);
+        }
+    },[newItems])
+
 
     return (
         <>
-            <div className='text-end text-lg pl-10 pr-10 mt-5'>
-                <h1>{time} วินาที</h1>
+            <div className='text-lg pl-10 pr-10 mt-5 flex gap-2 mb-2 justify-end items-center'>
+                <h1>{time} s</h1>
+                <Link
+                    href='./'
+                    target='_blank'
+                    className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                    Go to github
+                </Link>
             </div>
             <div className='grid grid-cols-3 gap-4 pl-10 pr-10'>
                 <div className='flex flex-col gap-2'>
@@ -121,8 +142,8 @@ const TodoList = () => {
                         <button key={index} type='button' onClick={() => selectItem(item)} className='py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700'>{item.name}</button>
                     ))}
                 </div>
-                <CardItem name='Fruit' data={newItems} onClick={handleBack} onButtonClick={cancelItem}></CardItem>
-                <CardItem name='Vegetable' data={newItems} onClick={handleBack} onButtonClick={cancelItem}></CardItem>
+                <CardItem name='Fruit' data={newItems} onClickHandleBack={handleBack} onClickCancelItem={cancelItem}></CardItem>
+                <CardItem name='Vegetable' data={newItems} onClickHandleBack={handleBack} onClickCancelItem={cancelItem}></CardItem>
             </div>
 
         </>

@@ -58,7 +58,7 @@ function filterType(val :string){
             <p className="mt-4 text-lg">ประสบการณ์การพัฒนาซอฟต์แวร์ 8 ปี ผมมุ่งมั่นที่จะนำทักษะและประสบการณ์ที่มีมาประยุกต์ใช้ เพื่อเติมเต็มและขับเคลื่อนองค์กรให้ก้าวหน้าไปพร้อมกัน</p>
             <div className='mt-4'>
             <a
-                href="./resume.pdf"
+                href="./resume_th.pdf"
                 target="_blank"
                 className="items-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
